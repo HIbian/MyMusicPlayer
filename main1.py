@@ -96,7 +96,8 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.resetPlayWith()
         selected = self.listWidget.selectedItems()[0]
         self.now_playing = selected.data(1)
-        self.player.setMedia(QMediaContent(QMediaResource(QUrl(self.now_playing['path']))))
+        r = QMediaResource(QUrl(self.now_playing['path']))
+        self.player.setMedia(QMediaContent(r))
         self.player.play()
         self.play_btn.setText('pause')
 
