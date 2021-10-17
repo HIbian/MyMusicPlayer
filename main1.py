@@ -32,6 +32,8 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
     def initLogic(self):
         # 初始化播放列表
         self.initPlayList()
+        # 初始化音量
+        self.initVolume()
         # 计时器
         self.timer.start(200)
         self.timer.timeout.connect(self.update)
@@ -179,6 +181,9 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
                 config.add_section('MUSIC')
             config.set('MUSIC', 'PATH_DIR', path)
             config.write(open(self.settingname, 'w'))
+
+    def initVolume(self):
+        self.voice.setValue(self.player.volume())
 
 
 if __name__ == '__main__':
