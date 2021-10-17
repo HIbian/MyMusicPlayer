@@ -4,7 +4,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QFileDialog
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent
-from PyQt5.QtCore import QTimer,QUrl
+from PyQt5.QtCore import QTimer, QUrl
 import pyui
 from enum import Enum
 
@@ -19,7 +19,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         super().__init__()
         self.setupUi(mainWindow)
         self.settingname = 'setting.music'
-        self.format_list = ('mp3', 'flac', 'm4a','wav')
+        self.format_list = ('mp3', 'flac', 'm4a', 'wav')
         self.now_playing = ''
         self.play_list = []
         self.switch_model = SwitchModel.ORDER
@@ -48,7 +48,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         if not os.path.isfile(self.settingname):
             return []
         config = configparser.ConfigParser()
-        config.read(self.settingname)
+        config.read(self.settingname, encoding='utf-8')
         music_dir = config.get('MUSIC', 'PATH_DIR')
         self.setMusicList(music_dir)
         self.showPlayList()
