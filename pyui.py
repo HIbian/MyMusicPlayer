@@ -39,6 +39,10 @@ class Ui_MainWindow(object):
         self.input_btn = QtWidgets.QPushButton(self.centralwidget)
         self.input_btn.setGeometry(QtCore.QRect(620, 430, 75, 23))
         self.input_btn.setObjectName("input_btn")
+        self.voice = QtWidgets.QSlider(self.centralwidget)
+        self.voice.setGeometry(QtCore.QRect(510, 120, 22, 160))
+        self.voice.setOrientation(QtCore.Qt.Vertical)
+        self.voice.setObjectName("voice")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

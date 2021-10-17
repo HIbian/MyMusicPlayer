@@ -32,15 +32,27 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
     def initLogic(self):
         # 初始化播放列表
         self.initPlayList()
+        # 计时器
         self.timer.start(200)
         self.timer.timeout.connect(self.update)
+        # 进度条
         self.horizontalSlider.sliderPressed.connect(self.jump_start)
         self.horizontalSlider.sliderReleased.connect(self.jump_finish)
+        # 播放按钮
         self.play_btn.clicked.connect(self.playorpause)
+        # 播放列表
         self.listWidget.itemDoubleClicked.connect(self.doubleClickedPlay)
+        # 下一首/上一首
         self.next_btn.clicked.connect(self.next)
         self.before_btn.clicked.connect(self.before)
+        # 音量按钮
+        # self.voice.sliderMoved.connect(self.voiceChange)
+        self.voice.valueChanged.connect(self.voiceChange)
+        # 导入播放列表
         self.input_btn.clicked.connect(self.importMusic)
+
+    def voiceChange(self):
+        self.player.setVolume(self.voice.value())
 
     def initPlayList(self):
         if not os.path.exists(self.settingname):

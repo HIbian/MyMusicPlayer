@@ -98,6 +98,19 @@
      <string>fileinput</string>
     </property>
    </widget>
+   <widget class="QSlider" name="voice">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>120</y>
+      <width>22</width>
+      <height>160</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
