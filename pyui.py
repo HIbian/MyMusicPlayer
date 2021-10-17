@@ -25,6 +25,29 @@ class Ui_MainWindow(object):
         self.listWidget.setObjectName("listWidget")
         self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider.setGeometry(QtCore.QRect(350, 322, 401, 20))
+        self.horizontalSlider.setStyleSheet("\n"
+"     QSlider::add-page:Horizontal\n"
+"     {     \n"
+"        background-color: rgb(87, 97, 106);\n"
+"        height:4px;\n"
+"     }\n"
+"     QSlider::sub-page:Horizontal \n"
+"    {\n"
+"        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(231,80,229, 255), stop:1 rgba(7,208,255, 255));\n"
+"        height:4px;\n"
+"     }\n"
+"    QSlider::groove:Horizontal \n"
+"    {\n"
+"        background:transparent;\n"
+"        height:6px;\n"
+"    }\n"
+"    QSlider::handle:Horizontal \n"
+"    {\n"
+"        height: 30px;\n"
+"        width:8px;\n"
+"        border-image: url(:./resource/1.png);\n"
+"        margin: -8 0px; \n"
+"    }")
         self.horizontalSlider.setProperty("value", 0)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider.setTickPosition(QtWidgets.QSlider.NoTicks)
@@ -40,13 +63,20 @@ class Ui_MainWindow(object):
         self.input_btn.setGeometry(QtCore.QRect(620, 430, 75, 23))
         self.input_btn.setObjectName("input_btn")
         self.voice = QtWidgets.QSlider(self.centralwidget)
-        self.voice.setGeometry(QtCore.QRect(510, 120, 22, 160))
+        self.voice.setGeometry(QtCore.QRect(510, 140, 22, 160))
+        self.voice.setStyleSheet("")
         self.voice.setOrientation(QtCore.Qt.Vertical)
         self.voice.setObjectName("voice")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.voice, self.horizontalSlider)
+        MainWindow.setTabOrder(self.horizontalSlider, self.before_btn)
+        MainWindow.setTabOrder(self.before_btn, self.next_btn)
+        MainWindow.setTabOrder(self.next_btn, self.input_btn)
+        MainWindow.setTabOrder(self.input_btn, self.play_btn)
+        MainWindow.setTabOrder(self.play_btn, self.listWidget)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

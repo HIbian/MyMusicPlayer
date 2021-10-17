@@ -46,6 +46,31 @@
       <height>20</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">
+     QSlider::add-page:Horizontal
+     {     
+        background-color: rgb(87, 97, 106);
+        height:4px;
+     }
+     QSlider::sub-page:Horizontal 
+    {
+        background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(231,80,229, 255), stop:1 rgba(7,208,255, 255));
+        height:4px;
+     }
+    QSlider::groove:Horizontal 
+    {
+        background:transparent;
+        height:6px;
+    }
+    QSlider::handle:Horizontal 
+    {
+        height: 30px;
+        width:8px;
+        border-image: url(:/resource/1.png);
+        margin: -8 0px; 
+    }</string>
+    </property>
     <property name="value">
      <number>0</number>
     </property>
@@ -102,10 +127,13 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>120</y>
+      <y>140</y>
       <width>22</width>
       <height>160</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
@@ -113,6 +141,15 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>voice</tabstop>
+  <tabstop>horizontalSlider</tabstop>
+  <tabstop>before_btn</tabstop>
+  <tabstop>next_btn</tabstop>
+  <tabstop>input_btn</tabstop>
+  <tabstop>play_btn</tabstop>
+  <tabstop>listWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

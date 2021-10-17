@@ -7,6 +7,7 @@ from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent
 from PyQt5.QtCore import QTimer, QUrl
 import pyui
 from enum import Enum
+import qtawesome as qta
 
 
 class SwitchModel(Enum):
@@ -48,10 +49,11 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.next_btn.clicked.connect(self.next)
         self.before_btn.clicked.connect(self.before)
         # 音量按钮
-        # self.voice.sliderMoved.connect(self.voiceChange)
         self.voice.valueChanged.connect(self.voiceChange)
         # 导入播放列表
         self.input_btn.clicked.connect(self.importMusic)
+
+        self.play_btn.setIcon(qta.icon('fa5s.play'))
 
     def voiceChange(self):
         self.player.setVolume(self.voice.value())
@@ -98,6 +100,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             self.horizontalSlider.setMinimum(0)
             self.horizontalSlider.setMaximum(self.player.duration())
             self.horizontalSlider.setValue(self.player.position())
+
         # print('------------------------')
         # print(datetime.datetime.today())
         # print(self.jump)
