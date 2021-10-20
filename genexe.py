@@ -1,4 +1,4 @@
 import subprocess
 
-subprocess.run('pyinstaller -F main1.py -w')
+subprocess.run('pyinstaller -F mymusicplayer.py -w')
 print("OK")

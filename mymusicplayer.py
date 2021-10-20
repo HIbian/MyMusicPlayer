@@ -64,7 +64,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         if not os.path.isfile(self.settingname):
             return []
         config = configparser.ConfigParser()
-        config.read(self.settingname, encoding='utf-8')
+        config.read(self.settingname)
         music_dir = config.get('MUSIC', 'PATH_DIR')
         self.setMusicList(music_dir)
         self.showPlayList()
