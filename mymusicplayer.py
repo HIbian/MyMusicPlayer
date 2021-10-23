@@ -64,7 +64,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         if not os.path.isfile(self.settingname):
             return []
         config = configparser.ConfigParser()
-        config.read(self.settingname)
+        config.read(self.settingname, encoding='utf-8')
         music_dir = config.get('MUSIC', 'PATH_DIR')
         self.setMusicList(music_dir)
         self.showPlayList()
@@ -183,7 +183,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             if not os.path.isfile(self.settingname):
                 config.add_section('MUSIC')
             config.set('MUSIC', 'PATH_DIR', path)
-            config.write(open(self.settingname, 'w'))
+            config.write(open(self.settingname, 'w',encoding='utf-8'))
 
     def initVolume(self):
         self.voice.setValue(self.player.volume())
