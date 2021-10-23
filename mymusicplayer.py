@@ -3,7 +3,7 @@ import os.path
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QFileDialog
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent,QMediaPlaylist
 from PyQt5.QtCore import QTimer, QUrl
 import pyui
 from enum import Enum
@@ -30,8 +30,8 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.setupUi(mainWindow)
         self.settingname = 'setting.music'
         self.format_list = ('mp3', 'flac', 'm4a', 'wav')
-        self.now_playing = ''
         self.play_list = []
+        self.playlist = QMediaPlaylist()
         self.switch_model = SwitchModel.ORDER
         self.jump = False
         self.press_go_to_next = False
@@ -81,21 +81,22 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
     '''根据路径获取音乐'''
 
     def setMusicList(self, music_dir):
+        self.playlist.clear()
         self.play_list.clear()
         for music in os.listdir(music_dir):
             if music.split('.')[-1] in self.format_list:
                 self.play_list.append(music_dir + '/' + music)
+                self.playlist.addMedia(QMediaContent(QMediaResource(QUrl(music_dir + '/' + music))))
+        self.playlist.setCurrentIndex(0)
 
     '''刷新播放列表'''
 
     def showPlayList(self):
         self.listWidget.clear()
         order = 0
-        for music in self.play_list:
+        for i in range(0, self.playlist.mediaCount()):
             item = QListWidgetItem()
-            item.setData(1, {'path': music, 'order': order})
-            order += 1
-            item.setText(music.split('/')[-1])
+            item.setText(self.playlist.media(i).resources()[0].url().url().split('/')[-1])
             self.listWidget.addItem(item)
 
     def update(self):
@@ -115,8 +116,6 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             # if self.player.state() == QMediaPlayer.PlayingState:
             self.len_time_lab.setText(secend2timelabel(self.player.duration()))
             self.played_time_lab.setText(secend2timelabel(self.player.position()))
-
-
         # print('------------------------')
         # print(datetime.datetime.today())
         # print(self.jump)
@@ -127,10 +126,9 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
     def doubleClickedPlay(self):
         # 初始化进度条，时间，播放暂停按钮
         self.resetPlayWith()
-        selected = self.listWidget.selectedItems()[0]
-        self.now_playing = selected.data(1)
-        r = QMediaResource(QUrl(self.now_playing['path']))
-        self.player.setMedia(QMediaContent(r))
+        selected = self.listWidget.selectedIndexes()[0].row()
+        self.playlist.setCurrentIndex(selected)
+        self.player.setMedia(self.playlist.currentMedia())
         self.player.play()
         self.play_btn.setText('pause')
 
@@ -143,7 +141,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.play_btn.setText('play')
 
     def playorpause(self):
-        if self.play_btn.text() == 'play':
+        if self.player.state() == QMediaPlayer.PausedState:
             self.player.play()
             self.play_btn.setText('pause')
         else:
@@ -158,36 +156,19 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
 
     # todo 使用偏函数合并next和before
     def next(self):
-        self.press_go_to_next = True
-        self.resetPlayWith()
-        if self.switch_model == SwitchModel.ORDER:
-            index = self.now_playing['order'] + 1
-            if index >= self.listWidget.count():
-                self.press_go_to_next = False
-                return
-            self.listWidget.setCurrentRow(index)
-
-        self.now_playing = self.listWidget.currentIndex().data(1)
-        self.player.setMedia(QMediaContent(QMediaResource(QUrl(self.now_playing['path']))))
+        self.playlist.next()
+        self.listWidget.setCurrentRow(self.playlist.currentIndex())
+        self.player.setMedia(self.playlist.currentMedia())
         self.player.play()
-        self.play_btn.setText('pause')
-        self.press_go_to_next = False
 
     def before(self):
-        self.press_go_to_next = True
-        self.resetPlayWith()
-        if self.switch_model == SwitchModel.ORDER:
-            index = self.now_playing['order'] - 1
-            if index >= self.listWidget.count():
-                self.press_go_to_next = False
-                return
-            self.listWidget.setCurrentRow(index)
-
-        self.now_playing = self.listWidget.currentIndex().data(1)
-        self.player.setMedia(QMediaContent(QMediaResource(QUrl(self.now_playing['path']))))
+        cindex = self.playlist.currentIndex()
+        if cindex == 0:
+            return
+        self.listWidget.setCurrentRow(cindex-1)
+        self.playlist.setCurrentIndex(cindex-1)
+        self.player.setMedia(self.playlist.currentMedia())
         self.player.play()
-        self.play_btn.setText('pause')
-        self.press_go_to_next = False
 
     def importMusic(self):
         path = QFileDialog.getExistingDirectory()
