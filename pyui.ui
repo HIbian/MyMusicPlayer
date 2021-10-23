@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>MyMusicPlayer</class>
+ <widget class="QMainWindow" name="MyMusicPlayer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MyMusicPlayer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>favicon.ico</normaloff>favicon.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="play_btn">
@@ -164,6 +168,41 @@
     <property name="text">
      <string>00:00</string>
     </property>
+   </widget>
+   <widget class="QComboBox" name="order_list">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>430</y>
+      <width>81</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>单曲播放</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>单曲循环</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>顺序播放</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>顺序循环</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>随机播放</string>
+     </property>
+    </item>
    </widget>
   </widget>
  </widget>

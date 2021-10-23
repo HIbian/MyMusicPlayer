@@ -11,11 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 651)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_MyMusicPlayer(object):
+    def setupUi(self, MyMusicPlayer):
+        MyMusicPlayer.setObjectName("MyMusicPlayer")
+        MyMusicPlayer.resize(800, 651)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("favicon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MyMusicPlayer.setWindowIcon(icon)
+        self.centralwidget = QtWidgets.QWidget(MyMusicPlayer)
         self.centralwidget.setObjectName("centralwidget")
         self.play_btn = QtWidgets.QPushButton(self.centralwidget)
         self.play_btn.setGeometry(QtCore.QRect(490, 370, 75, 23))
@@ -73,23 +76,36 @@ class Ui_MainWindow(object):
         self.len_time_lab = QtWidgets.QLabel(self.centralwidget)
         self.len_time_lab.setGeometry(QtCore.QRect(760, 320, 41, 31))
         self.len_time_lab.setObjectName("len_time_lab")
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.order_list = QtWidgets.QComboBox(self.centralwidget)
+        self.order_list.setGeometry(QtCore.QRect(490, 430, 81, 22))
+        self.order_list.setObjectName("order_list")
+        self.order_list.addItem("")
+        self.order_list.addItem("")
+        self.order_list.addItem("")
+        self.order_list.addItem("")
+        self.order_list.addItem("")
+        MyMusicPlayer.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        MainWindow.setTabOrder(self.voice, self.horizontalSlider)
-        MainWindow.setTabOrder(self.horizontalSlider, self.before_btn)
-        MainWindow.setTabOrder(self.before_btn, self.next_btn)
-        MainWindow.setTabOrder(self.next_btn, self.input_btn)
-        MainWindow.setTabOrder(self.input_btn, self.play_btn)
-        MainWindow.setTabOrder(self.play_btn, self.listWidget)
+        self.retranslateUi(MyMusicPlayer)
+        QtCore.QMetaObject.connectSlotsByName(MyMusicPlayer)
+        MyMusicPlayer.setTabOrder(self.voice, self.horizontalSlider)
+        MyMusicPlayer.setTabOrder(self.horizontalSlider, self.before_btn)
+        MyMusicPlayer.setTabOrder(self.before_btn, self.next_btn)
+        MyMusicPlayer.setTabOrder(self.next_btn, self.input_btn)
+        MyMusicPlayer.setTabOrder(self.input_btn, self.play_btn)
+        MyMusicPlayer.setTabOrder(self.play_btn, self.listWidget)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, MyMusicPlayer):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.play_btn.setText(_translate("MainWindow", "play"))
-        self.before_btn.setText(_translate("MainWindow", "before"))
-        self.next_btn.setText(_translate("MainWindow", "next"))
-        self.input_btn.setText(_translate("MainWindow", "fileinput"))
-        self.played_time_lab.setText(_translate("MainWindow", "00:00"))
-        self.len_time_lab.setText(_translate("MainWindow", "00:00"))
+        MyMusicPlayer.setWindowTitle(_translate("MyMusicPlayer", "MyMusicPlayer"))
+        self.play_btn.setText(_translate("MyMusicPlayer", "play"))
+        self.before_btn.setText(_translate("MyMusicPlayer", "before"))
+        self.next_btn.setText(_translate("MyMusicPlayer", "next"))
+        self.input_btn.setText(_translate("MyMusicPlayer", "fileinput"))
+        self.played_time_lab.setText(_translate("MyMusicPlayer", "00:00"))
+        self.len_time_lab.setText(_translate("MyMusicPlayer", "00:00"))
+        self.order_list.setItemText(0, _translate("MyMusicPlayer", "单曲播放"))
+        self.order_list.setItemText(1, _translate("MyMusicPlayer", "单曲循环"))
+        self.order_list.setItemText(2, _translate("MyMusicPlayer", "顺序播放"))
+        self.order_list.setItemText(3, _translate("MyMusicPlayer", "顺序循环"))
+        self.order_list.setItemText(4, _translate("MyMusicPlayer", "随机播放"))

@@ -3,8 +3,9 @@ import os.path
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem, QFileDialog
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent,QMediaPlaylist
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaResource, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QTimer, QUrl
+from PyQt5.QtGui import QIcon
 import pyui
 from enum import Enum
 import qtawesome as qta
@@ -13,18 +14,13 @@ import qtawesome as qta
 def secend2timelabel(second):
     if not second:
         return "00:00"
-    second = int(second/1000)
+    second = int(second / 1000)
     min = int(second / 60)
     sec = second % 60
     return '{:0>2d}:{:0>2d}'.format(min, sec)
 
 
-class SwitchModel(Enum):
-    ORDER = 1
-    RANDOM = 2
-
-
-class UiFromAddLogic(pyui.Ui_MainWindow):
+class UiFromAddLogic(pyui.Ui_MyMusicPlayer):
     def __init__(self, mainWindow):
         super().__init__()
         self.setupUi(mainWindow)
@@ -32,7 +28,6 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.format_list = ('mp3', 'flac', 'm4a', 'wav')
         self.play_list = []
         self.playlist = QMediaPlaylist()
-        self.switch_model = SwitchModel.ORDER
         self.jump = False
         self.press_go_to_next = False
         self.player = QMediaPlayer()  # 使用解码器支持更多格式 http://www.codecguide.com/download_kl.htm
@@ -40,10 +35,14 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.initLogic()
 
     def initLogic(self):
+        # 初始化配置文件
+        self.initSetting()
         # 初始化播放列表
         self.initPlayList()
         # 初始化音量
         self.initVolume()
+        # 初始化播放模式
+        self.initPlayMode()
         # 计时器
         self.timer.start(200)
         self.timer.timeout.connect(self.update)
@@ -61,8 +60,33 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         self.voice.valueChanged.connect(self.voiceChange)
         # 导入播放列表
         self.input_btn.clicked.connect(self.importMusic)
+        # 更改播放模式
+        self.order_list.currentIndexChanged.connect(self.modeChange)
 
         self.play_btn.setIcon(qta.icon('fa5s.play'))
+
+    def initSetting(self):
+        if os.path.isfile(self.settingname):
+            return
+        config = configparser.ConfigParser()
+        config.read(self.settingname, encoding='utf-8')
+        config.add_section('MUSIC')
+        config.set('MUSIC', 'PLAY_MODE', str(QMediaPlaylist.Sequential.real))
+        config.write(open(self.settingname, 'w', encoding='utf-8'))
+
+    def initPlayMode(self):
+        config = configparser.ConfigParser()
+        config.read(self.settingname, encoding='utf-8')
+        play_mode = int(config.get('MUSIC', 'PLAY_MODE'))
+        self.playlist.setPlaybackMode(play_mode)
+        self.order_list.setCurrentIndex(play_mode)
+
+    def modeChange(self):
+        self.playlist.setPlaybackMode(self.order_list.currentIndex())
+        config = configparser.ConfigParser()
+        config.read(self.settingname, encoding='utf-8')
+        config.set('MUSIC', 'PLAY_MODE', str(self.playlist.playbackMode().real))
+        config.write(open(self.settingname, 'w', encoding='utf-8'))
 
     def voiceChange(self):
         self.player.setVolume(self.voice.value())
@@ -74,7 +98,10 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             return []
         config = configparser.ConfigParser()
         config.read(self.settingname, encoding='utf-8')
-        music_dir = config.get('MUSIC', 'PATH_DIR')
+        try:
+            music_dir = config.get('MUSIC', 'PATH_DIR')
+        except configparser.NoOptionError:
+            return
         self.setMusicList(music_dir)
         self.showPlayList()
 
@@ -165,8 +192,8 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
         cindex = self.playlist.currentIndex()
         if cindex == 0:
             return
-        self.listWidget.setCurrentRow(cindex-1)
-        self.playlist.setCurrentIndex(cindex-1)
+        self.listWidget.setCurrentRow(cindex - 1)
+        self.playlist.setCurrentIndex(cindex - 1)
         self.player.setMedia(self.playlist.currentMedia())
         self.player.play()
 
@@ -176,9 +203,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             self.setMusicList(path)
             self.showPlayList()
             config = configparser.ConfigParser()
-            config.read(self.settingname)
-            if not os.path.isfile(self.settingname):
-                config.add_section('MUSIC')
+            config.read(self.settingname, encoding='utf-8')
             config.set('MUSIC', 'PATH_DIR', path)
             config.write(open(self.settingname, 'w', encoding='utf-8'))
 
