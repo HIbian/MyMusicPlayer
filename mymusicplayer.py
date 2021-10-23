@@ -10,6 +10,15 @@ from enum import Enum
 import qtawesome as qta
 
 
+def secend2timelabel(second):
+    if not second:
+        return "00:00"
+    second = int(second/1000)
+    min = int(second / 60)
+    sec = second % 60
+    return '{:0>2d}:{:0>2d}'.format(min, sec)
+
+
 class SwitchModel(Enum):
     ORDER = 1
     RANDOM = 2
@@ -90,16 +99,23 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             self.listWidget.addItem(item)
 
     def update(self):
-        # if self.play_btn.text() == 'play':
-        #     return
+
         if self.jump:
+            # 进度条快进
             self.player.setPosition(self.horizontalSlider.value())
         if self.player.position() != 0 and self.player.position() == self.player.duration():
+            # 当前歌曲播放完毕执行next()
             self.next()
         if self.play_btn.text() == 'pause' and not self.jump and not self.press_go_to_next:
+            # 播放状态:更新进度条
             self.horizontalSlider.setMinimum(0)
             self.horizontalSlider.setMaximum(self.player.duration())
             self.horizontalSlider.setValue(self.player.position())
+            # 更新时间
+            # if self.player.state() == QMediaPlayer.PlayingState:
+            self.len_time_lab.setText(secend2timelabel(self.player.duration()))
+            self.played_time_lab.setText(secend2timelabel(self.player.position()))
+
 
         # print('------------------------')
         # print(datetime.datetime.today())
@@ -183,7 +199,7 @@ class UiFromAddLogic(pyui.Ui_MainWindow):
             if not os.path.isfile(self.settingname):
                 config.add_section('MUSIC')
             config.set('MUSIC', 'PATH_DIR', path)
-            config.write(open(self.settingname, 'w',encoding='utf-8'))
+            config.write(open(self.settingname, 'w', encoding='utf-8'))
 
     def initVolume(self):
         self.voice.setValue(self.player.volume())

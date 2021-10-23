@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
 "    {\n"
 "        height: 30px;\n"
 "        width:8px;\n"
-"        border-image: url(:./resource/1.png);\n"
+"        border-image: url(:/resource/1.png);\n"
 "        margin: -8 0px; \n"
 "    }")
         self.horizontalSlider.setProperty("value", 0)
@@ -67,6 +67,12 @@ class Ui_MainWindow(object):
         self.voice.setStyleSheet("")
         self.voice.setOrientation(QtCore.Qt.Vertical)
         self.voice.setObjectName("voice")
+        self.played_time_lab = QtWidgets.QLabel(self.centralwidget)
+        self.played_time_lab.setGeometry(QtCore.QRect(300, 320, 41, 31))
+        self.played_time_lab.setObjectName("played_time_lab")
+        self.len_time_lab = QtWidgets.QLabel(self.centralwidget)
+        self.len_time_lab.setGeometry(QtCore.QRect(760, 320, 41, 31))
+        self.len_time_lab.setObjectName("len_time_lab")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -85,3 +91,5 @@ class Ui_MainWindow(object):
         self.before_btn.setText(_translate("MainWindow", "before"))
         self.next_btn.setText(_translate("MainWindow", "next"))
         self.input_btn.setText(_translate("MainWindow", "fileinput"))
+        self.played_time_lab.setText(_translate("MainWindow", "00:00"))
+        self.len_time_lab.setText(_translate("MainWindow", "00:00"))
